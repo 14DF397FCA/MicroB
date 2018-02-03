@@ -30,8 +30,10 @@ class LoginForm(FlaskForm):
 
 
 class EditProfileForm(FlaskForm):
-    username = StringField("username", validators=[DataRequired()])
+    username = StringField("Username", validators=[DataRequired()])
     about_me = TextAreaField("About me", validators=[Length(min=0, max=140)])
+    password = PasswordField("Password", validators=[DataRequired()])
+    password2 = PasswordField("Repeat password", validators=[DataRequired(), EqualTo("password")])
     submit = SubmitField("Update profile")
 
     def __init__(self, original_username, *args, **kwargs):
@@ -43,3 +45,9 @@ class EditProfileForm(FlaskForm):
             user = User.query.filter_by(username=self.username.data).first()
             if user is not None:
                 raise ValidationError("Please use different username!")
+
+
+class PostForm(FlaskForm):
+    post = TextAreaField("Say something", validators=[DataRequired(), Length(min=1, max=1024)])
+    submit = SubmitField("Add post")
+
